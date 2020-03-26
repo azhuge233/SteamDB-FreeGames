@@ -50,6 +50,9 @@ class Push:
             return False
         
     @staticmethod
-    def tg_bot(token, chat_id, msg="Test message"):
+    def tg_bot(token, chat_id, msg="Test message", htmlMode=False):
         tb = telebot.TeleBot(token)
-        tb.send_message(chat_id, msg)
+        if htmlMode:
+            tb.send_message(chat_id, msg, parse_mode="HTML")
+        else:
+            tb.send_message(chat_id, msg)
