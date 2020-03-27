@@ -7,8 +7,21 @@ from selenium.webdriver.chrome.options import Options
 
 URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
+ONE_HOUR_PATH = "one_hour_record.json"
 TOKEN = ""
 CHAT_ID = ""
+
+
+def send_notification(msg_list):
+	if len(msg_list) != 0:
+		for each in msg_list:
+			Push().tg_bot(msg=each, chat_id=CHAT_ID, token=TOKEN, htmlMode=True)
+			time.sleep(1)
+
+
+def record(path, data):
+	if len(data) != 0:
+		write_json(path=path, data=data)
 
 
 def get_html():
@@ -22,12 +35,17 @@ def get_html():
 	browser.close()
 	return html
 
+
 def main():
 	previous = load_json(path=PATH)
+	previous_on_hour = load_json(path=ONE_HOUR_PATH)
 	dbsoup = BeautifulSoup(get_html(), "lxml")
 
 	result = list([])
+	starting_result = list([])
+	
 	push_result = list([])
+	starting_push_result = list([])
 	# go through all the free games
 	for eachtr in dbsoup.select(".app"):
 		tds = eachtr.find_all("td")
@@ -50,6 +68,26 @@ def main():
 			d["StartTime"] = start_time
 			d["EndTime"] = end_time
 			result.append(d)
+			
+			# if the game is starting in one hour, send starting notification
+			start_time_split = start_time.split()
+			# in minutes or in seconds
+			if start_time_split[0] == "in" and (((int(start_time_split[1]) < 10) and ("minute" in start_time_split[2])) or ("second" in start_time_split[2])) :
+				starting_result.append(sub_id) # record starting games' subID
+				
+				is_push = True
+				for each in previous_on_hour:
+					if sub_id == each:
+						is_push = False
+				
+				if is_push:
+					steam_soup = get_url_single(url=steam_url)
+					name = steam_soup.select(".apphub_AppName")
+					if len(name) > 0:
+						game_name = steam_soup.select(".apphub_AppName")[0].contents[0]
+					tmp = "<b>" + game_name + " is starting " + start_time + "</b>\n\n"
+					tmp += "Sub ID: <i>" + sub_id + "</i>"
+					starting_push_result.append(tmp) # notification list
 			
 			# check if this game exists in previous records
 			is_push = True
@@ -74,13 +112,12 @@ def main():
 				push_result.append(tmp)
 	
 	# do the notify job
-	if len(push_result) != 0:
-		for each in push_result:
-			Push().tg_bot(msg=each, chat_id=CHAT_ID, token=TOKEN, htmlMode=True)
-			time.sleep(0.5)
+	send_notification(starting_push_result)
+	send_notification(push_result)
+	
 	# refresh the record
-	if len(result) != 0:
-		write_json(path=PATH, data=result)
+	record(PATH, result)
+	record(ONE_HOUR_PATH, starting_result)
 			
 if __name__ == "__main__":
 	main()
