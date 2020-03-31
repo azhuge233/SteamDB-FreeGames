@@ -72,7 +72,7 @@ def main():
 			# if the game is starting in one hour, send starting notification
 			start_time_split = start_time.split()
 			# in minutes or in seconds
-			if start_time_split[0] == "in" and (((int(start_time_split[1]) < 10) and ("minute" in start_time_split[2])) or ("second" in start_time_split[2])) :
+			if start_time_split[0] == "in" and (((int(start_time_split[1]) <= 10) and ("minute" in start_time_split[2])) or ("second" in start_time_split[2])) :
 				starting_result.append(sub_id) # record starting games' subID
 				
 				is_push = True
