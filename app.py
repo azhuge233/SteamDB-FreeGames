@@ -35,7 +35,7 @@ def utc2cst(utc): # convert UTC to CST
 
 def main():
 	previous = load_json(path=PATH)
-	db_free_page_soup = selenium_get_url(URL, DELAY)
+	db_free_page_soup = selenium_get_url(URL, DELAY, nopic=True)
 
 	result = list([])
 	
@@ -83,7 +83,7 @@ def main():
 				if len(name) > 0:
 					game_name = steam_soup.select(".apphub_AppName")[0].contents[0]
 				
-				db_sub_page_soup = selenium_get_url(DB_PREFIX_URL + sub_id + "/", DELAY)
+				db_sub_page_soup = selenium_get_url(DB_PREFIX_URL + sub_id + "/", DELAY, nopic=True)
 				start_end_time = db_sub_page_soup.select("span.timeago.muted")
 				if (len(start_end_time) == 2):
 					start_time = utc2cst(

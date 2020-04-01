@@ -37,10 +37,13 @@ def get_url_list(url, decode='utf-8'):
     return soup
 
 
-def selenium_get_url(url, delay=0):
+def selenium_get_url(url, delay=0, nopic=False):
     chrome_options = Options()
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    if nopic:
+        prefs = {'profile.managed_default_content_settings.images': 2}
+        chrome_options.add_experimental_option('prefs', prefs)
 
     browser = webdriver.Chrome(options=chrome_options)
     browser.get(url)
