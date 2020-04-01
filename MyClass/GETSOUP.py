@@ -1,10 +1,12 @@
-import ssl
+import ssl, time
 from bs4 import BeautifulSoup
 from urllib import request
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 HEAD = dict({})
-HEAD['USER-AGENT'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
-                        "Chrome/75.0.3770.100 Safari/537.36"
+HEAD['USER-AGENT'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) " \
+                     "Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69"
 CONTEXT = ssl._create_unverified_context()
 
 
@@ -33,3 +35,17 @@ def get_url_list(url, decode='utf-8'):
         soup.append(BeautifulSoup(html, 'lxml'))
     
     return soup
+
+
+def selenium_get_url(url, delay=0):
+    chrome_options = Options()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+
+    browser = webdriver.Chrome(options=chrome_options)
+    browser.get(url)
+    time.sleep(delay)
+    html = browser.page_source
+    browser.close()
+
+    return BeautifulSoup(html, 'lxml')
