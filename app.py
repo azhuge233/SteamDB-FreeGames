@@ -9,7 +9,6 @@ CHAT_ID = ""
 '''CONFIG END'''
 
 URL = "https://steamdb.info/upcoming/free/"
-DB_PREFIX_URL = "https://steamdb.info/sub/"
 PATH = "record.json"
 DELAY = 7
 
@@ -27,7 +26,7 @@ def record(path, data): # write data to json file
 
 
 def utc2cst(utc): # convert UTC to CST
-	utc_format = "%Y-%m-%dT%H:%M:%S"
+	utc_format = "%d %B %Y – %H:%M:%S %Z"
 	utc_date = datetime.datetime.strptime(utc, utc_format)
 	cst_date = utc_date + datetime.timedelta(hours=8)
 	return cst_date.strftime("%Y 年 %m 月 %d 日 %H:%M")
@@ -40,7 +39,7 @@ def main():
 	result = list([])
 	
 	push_result = list([])
-
+	
 	# go through all the free games
 	for each_tr in db_free_page_soup.select(".app"):
 		tds = each_tr.find_all("td")
@@ -51,8 +50,8 @@ def main():
 		sub_id = str(tds[1].contents[1].get('href').split('/')[2])
 		# remove the url variables
 		steam_url = str(tds[0].contents[1].get('href')).split("?")[0]
-		start_time = str(tds[3].contents[0])
-		end_time = str(tds[4].contents[0])
+		start_time = str(utc2cst(tds[3].get("title")))
+		end_time = str(utc2cst(tds[4].get("title")))
 		'''get basic info end'''
 		
 		# +1 game
@@ -63,6 +62,8 @@ def main():
 			d["Name"] = game_name
 			d["ID"] = sub_id
 			d["URL"] = steam_url
+			d["Start_time"] = start_time
+			d["End_time"] = end_time
 			result.append(d)
 			
 			'''new free games notify'''
@@ -82,13 +83,6 @@ def main():
 				name = steam_soup.select(".apphub_AppName")
 				if len(name) > 0:
 					game_name = steam_soup.select(".apphub_AppName")[0].contents[0]
-				
-				db_sub_page_soup = selenium_get_url(DB_PREFIX_URL + sub_id + "/", DELAY, nopic=True)
-				start_end_time = db_sub_page_soup.select("span.timeago.muted")
-				if (len(start_end_time) == 2):
-					start_time = utc2cst(
-						str(start_end_time[1].get("title")).split('+')[0])
-					end_time = utc2cst(str(start_end_time[0].get("title")).split('+')[0])
 				'''get game details end'''
 				
 				tmp = "<b>" + game_name + "</b>\n\n"
@@ -105,6 +99,6 @@ def main():
 	
 	# refresh the record
 	record(PATH, result)
-			
+
 if __name__ == "__main__":
 	main()
