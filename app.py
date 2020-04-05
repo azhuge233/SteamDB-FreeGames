@@ -37,21 +37,27 @@ def main():
 	db_free_page_soup = selenium_get_url(URL, DELAY, nopic=True)
 
 	result = list([])
-	
 	push_result = list([])
 	
 	# go through all the free games
-	for each_tr in db_free_page_soup.select(".app"):
+	for each_tr in db_free_page_soup.select(".sub"):
 		tds = each_tr.find_all("td")
+		td_len = len(tds)
 		
 		'''get basic info'''
-		free_type = tds[2].contents[0]
+		if td_len == 5: # steamdb add a install button in table column
+			free_type = tds[2].contents[0]
+			start_time = str(utc2cst(tds[3].get("title")))
+			end_time = str(utc2cst(tds[4].get("title")))
+		else :
+			free_type = tds[3].contents[0]
+			start_time = str(utc2cst(tds[4].get("title")))
+			end_time = str(utc2cst(tds[5].get("title")))
+		
 		game_name = str(tds[1].find("b").contents[0])
 		sub_id = str(tds[1].contents[1].get('href').split('/')[2])
 		# remove the url variables
 		steam_url = str(tds[0].contents[1].get('href')).split("?")[0]
-		start_time = str(utc2cst(tds[3].get("title")))
-		end_time = str(utc2cst(tds[4].get("title")))
 		'''get basic info end'''
 		
 		# +1 game
