@@ -104,7 +104,10 @@ def main():
 	send_notification(push_result)
 	
 	# refresh the record
-	record(PATH, result)
+	if len(result) > 0:
+		record(PATH, result)
+	else:
+		pass
 
 if __name__ == "__main__":
 	main()
