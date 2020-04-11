@@ -44,11 +44,14 @@ def selenium_get_url(url, delay=0, nopic=False):
     if nopic:
         prefs = {'profile.managed_default_content_settings.images': 2}
         chrome_options.add_experimental_option('prefs', prefs)
-
     browser = webdriver.Chrome(options=chrome_options)
-    browser.get(url)
-    time.sleep(delay)
-    html = browser.page_source
-    browser.close()
-
+    try:
+        browser.get(url)
+        time.sleep(delay)
+        html = browser.page_source
+    except:
+        print("Get page source error!")
+        pass
+    finally:
+        browser.close()
     return BeautifulSoup(html, 'lxml')

@@ -33,7 +33,9 @@ def utc2cst(utc): # convert UTC to CST
 
 
 def main():
+	print("Loading previous records...")
 	previous = load_json(path=PATH)
+	print("Getting page source...")
 	db_free_page_soup = selenium_get_url(URL, DELAY, nopic=True)
 
 	result = list([])
@@ -62,7 +64,7 @@ def main():
 		
 		# +1 game
 		if free_type != "Weekend":
-			
+			print("Found free game: " + game_name)
 			# record information
 			d = dict({})
 			d["Name"] = game_name
@@ -91,6 +93,8 @@ def main():
 					game_name = steam_soup.select(".apphub_AppName")[0].contents[0]
 				'''get game details end'''
 				
+				print("Add " + game_name + " to push list")
+				
 				tmp = "<b>" + game_name + "</b>\n\n"
 				tmp += "Sub ID: <i>" + sub_id + "</i>\n"
 				# prettify url
@@ -101,13 +105,19 @@ def main():
 			'''new free games notify end'''
 	
 	# do the notify job
-	send_notification(push_result)
+	if len(push_result) == 0:
+		print("No new free games, no messages were sent!")
+	else:
+		print("Sending notifications...")
+		send_notification(push_result)
 	
 	# refresh the record
 	if len(result) > 0:
+		print("Writing records...")
 		record(PATH, result)
 	else:
-		pass
+		print("No records were written!")
+	print("Task Done!")
 
 if __name__ == "__main__":
 	main()
