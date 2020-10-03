@@ -7,13 +7,14 @@ Gathering Steam free games information from [SteamDB](https://steamdb.info/upcom
   - selenium
   - bs4(lxml)
   - pyTelegramBotAPI
+  - 2captcha-python
 - GUI enviroment
 - Google Chrome
   - with chromedriver installed
 
 ## Usage
 
-Fill your bot TOKEN and your account ID to CONFIG field in the app.py file, then run
+Fill your bot TOKEN, your account ID and 2captcha API key to CONFIG field in the app.py file, then run
 
 ```shell
 python3 app.py
