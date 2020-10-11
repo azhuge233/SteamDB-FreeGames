@@ -1,5 +1,10 @@
 # SteamDB-FreeGames
+
 Gathering Steam free games information from [SteamDB](https://steamdb.info/upcoming/free/) then send notification using Telegram bot.
+
+### Note that this script is no longer usable, since SteamDB updated the anti-spider method, I may update this once it's achievable.
+
+Here's the whole sotry: At the very beginning they just has a 5 secs countdown  before you can reach the page, then couple weeks ago they added hcaptcha to prevent spiders, I used 2captcha to bypass it, but when I just updated the 2captcha version, they changed the method, now they are using a different method with no captcha implements that I apparently can't reach the free games page with selenium.
 
 ## Requirements
 
