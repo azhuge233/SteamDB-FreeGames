@@ -1,6 +1,7 @@
 import datetime
 import sys
 from twocaptcha import TwoCaptcha
+from fake_useragent import UserAgent
 from MyClass.json_op import *
 from MyClass.PUSH import *
 from MyClass.GETSOUP import *
@@ -31,6 +32,7 @@ logger.name = "SteamDB-FreeGames"
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
+chrome_options.add_argument('User-Agent=' + str(UserAgent().random))
 # have to remove no picture option due to captcha loading issue
 # if picture loading were disabled, captcha may fails loading randomly
 browser = webdriver.Chrome(options=chrome_options)
@@ -74,8 +76,7 @@ def solv_captcha(sitekey):  # solve captcha
 		return result['code']
 
 
-def get_sitekey():  # get captcha sitekey
-	html = BeautifulSoup(browser.page_source, 'lxml')
+def get_sitekey(html):  # get captcha sitekey
 	iframe = html.select('iframe')
 	source = iframe[0].get('src')
 	sitekey = str(source).split("sitekey=")[1]
@@ -85,6 +86,8 @@ def get_sitekey():  # get captcha sitekey
 def load_page():
 	browser.get(URL)
 	time.sleep(FIRST_DELAY)  # wait a few seconds to load the captcha
+	html = BeautifulSoup(browser.page_source, 'lxml')
+	return html
 
 
 def start_process(previous, db_free_page_soup):
@@ -178,35 +181,45 @@ def main():
 	logger.warning("Done")
 	
 	logger.warning("Loading the page...")
-	load_page()
+	html = load_page()
 	logger.warning("Done")
 	
-	logger.warning("Getting sitekey...")
-	sitekey = get_sitekey()
-	logger.warning("Sitekey: " + sitekey)
+	if html.find('iframe') is None:
+		logger.info("Captcha not found")
+		# web driver ends
+		browser.quit()
+		
+		# start analysing page source
+		logger.warning("Start processing data...")
+		start_process(previous=previous, db_free_page_soup=html)
+	else:
+		logger.warning("Getting sitekey...")
+		sitekey = get_sitekey(html)
+		logger.warning("Sitekey: " + sitekey)
+		
+		logger.warning("Solving captcha...")
+		result_code = solv_captcha(sitekey=sitekey)
+		logger.warning("Done")
 	
-	logger.warning("Solving captcha...")
-	result_code = solv_captcha(sitekey=sitekey)
-	logger.warning("Done")
+		# inject javascript submit function
+		logger.warning("Submitting captcha code...")
+		browser.execute_script(SUBMIT_SCRIPT)
+		browser.execute_script("submitToken('" + result_code + "')")
+		time.sleep(SECOND_DELAY)  # give some time to let browser load the page
+		logger.warning("Done")
 	
-	# inject javascript submit function
-	logger.warning("Submitting captcha code...")
-	browser.execute_script(SUBMIT_SCRIPT)
-	browser.execute_script("submitToken('" + result_code + "')")
-	time.sleep(SECOND_DELAY)  # give some time to let browser load the page
-	logger.warning("Done")
+		# convert page html to lxml
+		logger.warning("Getting page source...")
+		db_free_page_soup = BeautifulSoup(browser.page_source, 'lxml')
+		logger.warning("Done")
+		
+		# web driver ends
+		browser.quit()
 	
-	# convert page html to lxml
-	logger.warning("Getting page source...")
-	db_free_page_soup = BeautifulSoup(browser.page_source, 'lxml')
-	logger.warning("Done")
+		# start analysing page source
+		logger.warning("Start processing data...")
+		start_process(previous=previous, db_free_page_soup=db_free_page_soup)
 	
-	# web driver ends
-	browser.quit()
-	
-	# start analysing page source
-	logger.warning("Start processing data...")
-	start_process(previous=previous, db_free_page_soup=db_free_page_soup)
 	logger.warning("Task Done!")
 	logger.info("\n\n")
 
