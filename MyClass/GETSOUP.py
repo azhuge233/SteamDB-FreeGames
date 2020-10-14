@@ -1,4 +1,5 @@
 import ssl, time
+import undetected_chromedriver
 from bs4 import BeautifulSoup
 from urllib import request
 from selenium import webdriver
@@ -37,14 +38,20 @@ def get_url_list(url, decode='utf-8'):
     return soup
 
 
-def selenium_get_url(url, delay=0, nopic=False):
+def selenium_get_url(url, delay=0, nopic=False, uc=False):
     chrome_options = Options()
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    
     if nopic:
         prefs = {'profile.managed_default_content_settings.images': 2}
         chrome_options.add_experimental_option('prefs', prefs)
-    browser = webdriver.Chrome(options=chrome_options)
+        
+    if uc:
+        browser = undetected_chromedriver.Chrome()
+    else:
+        browser = webdriver.Chrome(options=chrome_options)
+        
     try:
         browser.get(url)
         time.sleep(delay)
@@ -54,4 +61,6 @@ def selenium_get_url(url, delay=0, nopic=False):
         pass
     finally:
         browser.close()
+        
     return BeautifulSoup(html, 'lxml')
+
