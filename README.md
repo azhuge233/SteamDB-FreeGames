@@ -2,15 +2,13 @@
 
 Gathering Steam free games information from [SteamDB](https://steamdb.info/upcoming/free/) then send notification using Telegram bot.
 
-**Attention**: The anti-bot method upgraded again, this project is no longer working.
-
 ## Requirements
 
 - python3
   - selenium
   - bs4(lxml)
   - pyTelegramBotAPI
-  - undetected_chromedriver
+  - undetected_chromedriver(must install the latest version, currently 1.5.1)
 - GUI enviroment
 - Google Chrome
   - with chromedriver installed
