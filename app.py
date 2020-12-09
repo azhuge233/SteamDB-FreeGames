@@ -136,7 +136,7 @@ def main():
 	logger.warning("Done")
 	
 	logger.warning("Loading the page...")
-	html = selenium_get_url(url=URL, delay=FIRST_DELAY, nopic=True, uc=True)
+	html = selenium_get_url(url=URL, delay=FIRST_DELAY, uc=True)
 	logger.warning("Done")
 		
 	# start analysing page source
