@@ -2,6 +2,8 @@
 
 Gathering Steam free games information from [SteamDB](https://steamdb.info/upcoming/free/) then send notification using Telegram bot.
 
+**Seems that SteamDB really don't want people scraping their site, this repo will trigger a SteamDB IP ban which was added recently.**
+
 ## Requirements
 
 - python3
