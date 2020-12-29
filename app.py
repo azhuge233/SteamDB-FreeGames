@@ -39,7 +39,7 @@ def record(path, data):  # write data to json file
 
 
 def utc2cst(utc):  # convert UTC to CST
-	utc_format = "%d %B %Y – %H:%M:%S %Z"
+	utc_format = "%Y-%m-%dT%H:%M:%S+00:00"
 	utc_date = datetime.datetime.strptime(utc, utc_format)
 	cst_date = utc_date + datetime.timedelta(hours=8)
 	return cst_date.strftime("%Y 年 %m 月 %d 日 %H:%M")
@@ -51,6 +51,9 @@ def start_process(previous, db_free_page_soup):
 	
 	# go through all the free games
 	for each_tr in db_free_page_soup.select(".app"):
+		if ("hidden" in each_tr.attrs.keys()):
+			continue
+		
 		tds = each_tr.find_all("td")
 		td_len = len(tds)
 		
