@@ -10,8 +10,8 @@ Gathering Steam free games information from [SteamDB](https://steamdb.info/upcom
   - playwright
   - bs4(lxml)
   - pyTelegramBotAPI
-  - selenium (Not using, but required)
-  - undetected_chromedriver (Not using, but required)
+  - ~~selenium~~ (Not using, but required)
+  - ~~undetected_chromedriver~~ (Not using, but required)
 - ~~GUI enviroment~~ Now it's using playwright headless mode.
 - ~~Google Chrome~~ Now it's been taken care of by playwright.
   - ~~with chromedriver installed~~ Playwright will install chromium, firefox and webkit during it's installation.
