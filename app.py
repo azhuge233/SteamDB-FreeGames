@@ -13,12 +13,13 @@ CHAT_ID = ""  # Admin ID
 '''Static Variables'''
 URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
-FIRST_DELAY = 10
+FIRST_DELAY = 8
 '''Static Variables END'''
 
 '''Global Variables'''
 # logger
 logger.name = "SteamDB-FreeGames"
+BROWSER_TYPE = ["chromium", "firefox", "webkit"]
 '''Global Variables END'''
 
 
@@ -139,7 +140,7 @@ def main():
 	logger.warning("Done")
 	
 	logger.warning("Loading the page...")
-	html = selenium_get_url(url=URL, delay=FIRST_DELAY, uc=True)
+	html = playright_get_url(url=URL, type=BROWSER_TYPE[1], delay=FIRST_DELAY, headless=False)
 	logger.warning("Done")
 		
 	# start analysing page source
