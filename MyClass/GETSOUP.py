@@ -4,14 +4,21 @@ from bs4 import BeautifulSoup
 from urllib import request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from playwright import sync_playwright
 
 HEAD = dict({})
 HEAD['USER-AGENT'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) " \
                      "Chrome/80.0.3987.149 Safari/537.36 Edg/80.0.361.69"
 CONTEXT = ssl._create_unverified_context()
 
+TYPE_LIST = ["chromium", "firefox", "webkit"]
 
-def get_url_single(url, decode='utf-8'):
+GET_PAGE_SOURCE_ERROR_MSG = "Get page source error!"
+
+
+def get_url_single(url, headers=None, decode='utf-8'):
+    if headers is not None:
+        HEAD.update(headers)
     req = request.Request(url, headers=HEAD)
     if "https" in url:
         response = request.urlopen(req, context=CONTEXT)
@@ -23,7 +30,9 @@ def get_url_single(url, decode='utf-8'):
     return soup
 
 
-def get_url_list(url, decode='utf-8'):
+def get_url_list(url, headers=None, decode='utf-8'):
+    if headers is not None:
+        HEAD.update(headers)
     soup = list([])
     
     for each in url:
@@ -54,13 +63,39 @@ def selenium_get_url(url, delay=0, nopic=False, uc=False):
         
     try:
         browser.get(url)
-        time.sleep(delay)
+        if delay != 0:
+            time.sleep(delay)
         html = browser.page_source
     except:
-        print("Get page source error!")
+        print(GET_PAGE_SOURCE_ERROR_MSG)
         pass
     finally:
         browser.close()
         
     return BeautifulSoup(html, 'lxml')
 
+def playright_get_url(url, type="firefox", delay=0, headless=True):
+    type = type.lower()
+    if type not in TYPE_LIST:
+        raise Exception("Type {} is invalid.\nTYPE should only be 'chromium' 'firefox' or 'webkit'".format(type))
+    
+    with sync_playwright() as p:
+        if type == TYPE_LIST[0]:
+            browser = p.chromium.launch(headless=headless)
+        elif type == TYPE_LIST[1]:
+            browser = p.firefox.launch(headless=headless)
+        else:
+            browser = p.webkit.launch(headless=headless)
+            
+        try:
+            page = browser.newPage()
+            page.goto(url=url)
+            if delay != 0:
+                time.sleep(delay)
+            html = page.innerHTML("*")
+        except:
+            raise Exception(GET_PAGE_SOURCE_ERROR_MSG)
+        finally:
+            browser.close()
+        
+        return BeautifulSoup(html, 'lxml')
