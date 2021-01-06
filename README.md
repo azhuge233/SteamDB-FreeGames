@@ -14,7 +14,7 @@ Gathering Steam free games information from [SteamDB](https://steamdb.info/upcom
   - undetected_chromedriver (Not using, but required)
 - ~~GUI enviroment~~ Now it's using playwright headless mode.
 - ~~Google Chrome~~ Now it's been taken care of by playwright.
-  - ~~with chromedriver installed~~ Playwtight will install chromium, firefox and webkit during it's installation.
+  - ~~with chromedriver installed~~ Playwright will install chromium, firefox and webkit during it's installation.
 
 ## Usage
 
