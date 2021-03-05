@@ -140,7 +140,7 @@ def main():
 	logger.warning("Done")
 	
 	logger.warning("Loading the page...")
-	html = playright_get_url(url=URL, type=BROWSER_TYPE[1], delay=FIRST_DELAY, headless=True)
+	html = playright_get_url(url=URL, type=BROWSER_TYPE[2], delay=FIRST_DELAY, headless=True)
 	logger.warning("Done")
 		
 	# start analysing page source
