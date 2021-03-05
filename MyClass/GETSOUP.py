@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from urllib import request
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from playwright import sync_playwright
+from playwright.sync_api import sync_playwright
 
 HEAD = dict({})
 HEAD['USER-AGENT'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) " \
@@ -88,11 +88,11 @@ def playright_get_url(url, type="firefox", delay=0, headless=True):
             browser = p.webkit.launch(headless=headless)
             
         try:
-            page = browser.newPage()
+            page = browser.new_page()
             page.goto(url=url)
             if delay != 0:
                 time.sleep(delay)
-            html = page.innerHTML("*")
+            html = page.inner_html("*")
         except:
             raise Exception(GET_PAGE_SOURCE_ERROR_MSG)
         finally:
