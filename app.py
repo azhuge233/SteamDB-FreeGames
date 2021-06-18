@@ -61,12 +61,21 @@ def start_process(previous, db_free_page_soup):
 		'''get basic info'''
 		if td_len == 5:  # steamdb add a install button in table column
 			free_type = tds[2].contents[0]
-			start_time = str(utc2cst(tds[3].get("data-time")))
-			end_time = str(utc2cst(tds[4].get("data-time")))
+			start_time = str(tds[3].get("data-time"))
+			end_time = str(tds[4].get("data-time"))
 		else:
 			free_type = tds[3].contents[0]
-			start_time = str(utc2cst(tds[4].get("data-time")))
-			end_time = str(utc2cst(tds[5].get("data-time")))
+			start_time = str(tds[4].get("data-time"))
+			end_time = str(tds[5].get("data-time"))
+			
+		if start_time == str(None):
+			start_time = "None"
+		else:
+			start_time = utc2cst(start_time)
+		if end_time == str(None):
+			end_time = "None"
+		else:
+			end_time = utc2cst(end_time)
 		
 		game_name = str(tds[1].find("b").contents[0])
 		sub_id = str(tds[1].contents[1].get('href').split('/')[2])
