@@ -1,4 +1,5 @@
 import telebot
+import urllib.parse
 from urllib import request
 
 
@@ -31,11 +32,11 @@ class Push:
         else:
             push_url = self.METHOD['bark']
             
-        title = title.replace(' ', '%20')
-        content = content.replace(' ', '%20')
+        title = urllib.parse.quote(title)
+        content = urllib.parse.quote(content)
 
         if copy_flag:
-            push_url = push_url + key + "/" + title + "/" + content + "?copy=" + copy_content
+            push_url = push_url + key + "/" + title + "/" + content + "?copy=" + urllib.parse.quote(copy_content)
         elif url_flag:
             push_url = push_url + key + "/" + title + "/" + content + "?url=" + url
         else:

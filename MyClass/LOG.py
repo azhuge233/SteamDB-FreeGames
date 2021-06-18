@@ -10,7 +10,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # file Log
-f_handler = logging.FileHandler("log.txt")
+f_handler = logging.FileHandler("log.txt", encoding='utf-8')
 f_handler.setLevel(logging.INFO)
 f_handler.setFormatter(format)
 
