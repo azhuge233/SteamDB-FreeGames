@@ -43,7 +43,7 @@ def utc2cst(utc):  # convert UTC to CST
 	utc_format = "%Y-%m-%dT%H:%M:%S+00:00"
 	utc_date = datetime.datetime.strptime(utc, utc_format)
 	cst_date = utc_date + datetime.timedelta(hours=8)
-	return cst_date.strftime("%Y 年 %m 月 %d 日 %H:%M")
+	return cst_date.strftime("%Y {y} %m {m} %d {d} %H:%M").format(y='年', m='月', d='日')
 
 
 def start_process(previous, db_free_page_soup):
