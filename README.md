@@ -4,6 +4,8 @@ Gathering Steam free games information from [SteamDB](https://steamdb.info/upcom
 
 **Seems that SteamDB really don't want people scraping their site, check [Things should be aware of](https://github.com/azhuge233/SteamDB-FreeGames/blob/master/Things%20should%20be%20aware%20of.md) before using.**
 
+There's a [dotnet version](https://github.com/azhuge233/SteamDB-FreeGames-dotnet).
+
 ## Requirements
 
 - python3
