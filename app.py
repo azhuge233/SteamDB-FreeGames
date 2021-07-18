@@ -84,13 +84,13 @@ def start_process(previous, db_free_page_soup):
 		if free_type != "Weekend":
 			logger.info("Found free game: " + game_name)
 			# record information
-			d = dict({})
-			d["Name"] = game_name
-			d["ID"] = sub_id
-			d["URL"] = steam_url
-			d["Start_time"] = start_time
-			d["End_time"] = end_time
-			result.append(d)
+			result.append({
+				"Name": game_name,
+				"ID": sub_id,
+				"URL": steam_url,
+				"Start_time": start_time,
+				"End_time": end_time,
+			})
 			
 			'''new free games notify'''
 			# if it does not exist, then notify
