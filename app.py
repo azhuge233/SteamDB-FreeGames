@@ -55,10 +55,9 @@ def start_process(previous, db_free_page_soup):
 			continue
 		
 		tds = each_tr.find_all("td")
-		td_len = len(tds)
 		
 		'''get basic info'''
-		if td_len == 5:  # steamdb add a install button in table column
+		if len(tds) == 5:  # steamdb add a install button in table column
 			free_type = tds[2].contents[0]
 			start_time = str(tds[3].get("data-time"))
 			end_time = str(tds[4].get("data-time"))
@@ -66,7 +65,7 @@ def start_process(previous, db_free_page_soup):
 			free_type = tds[3].contents[0]
 			start_time = str(tds[4].get("data-time"))
 			end_time = str(tds[5].get("data-time"))
-			
+		
 		# str(None) == "None", added this in C# version
 		# start_time = "None" if start_time == None else utc2cst(start_time)
 		# end_time = "None" if end_time == None else utc2cst(end_time)
@@ -104,6 +103,8 @@ def start_process(previous, db_free_page_soup):
 				logger.info("Add " + game_name + " to push list")
 
 				push_result.append(NOTIFICATION_FORMAT.format(game_name, sub_id, steam_url, game_name, start_time, end_time))
+			else:
+				logger.info(game_name + " was found in previous records, stop adding it to push list...")
 			'''new free games notify end'''
 	
 	# do the notify job
