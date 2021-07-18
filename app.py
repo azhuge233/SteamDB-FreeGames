@@ -15,6 +15,7 @@ URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
 FIRST_DELAY = 10
 BROWSER_TYPE = ["chromium", "firefox", "webkit"]
+NOTIFICATION_FORMAT = "<b>{0}</b>\n\nSub ID: <i>{1}</i>\n链接: <a href=\"{2}\" > {3}</a>\n开始时间: {4}\n结束时间: {5}\n"
 # logger
 logger.name = "SteamDB-FreeGames"
 '''Global Variables END'''
@@ -105,14 +106,8 @@ def start_process(previous, db_free_page_soup):
 				'''get game details end'''
 				
 				logger.info("Add " + game_name + " to push list")
-				
-				tmp = "<b>" + game_name + "</b>\n\n"
-				tmp += "Sub ID: <i>" + sub_id + "</i>\n"
-				# prettify url
-				tmp += "链接: <a href=\"" + steam_url + "\" >" + game_name + "</a>" + "\n"
-				tmp += "开始时间: " + start_time + "\n"
-				tmp += "结束时间: " + end_time
-				push_result.append(tmp)
+
+				push_result.append(NOTIFICATION_FORMAT.format(game_name, sub_id, steam_url, game_name, start_time, end_time))
 			'''new free games notify end'''
 	
 	# do the notify job
