@@ -67,14 +67,9 @@ def start_process(previous, db_free_page_soup):
 			start_time = str(tds[4].get("data-time"))
 			end_time = str(tds[5].get("data-time"))
 			
-		if start_time == str(None):
-			start_time = "None"
-		else:
-			start_time = utc2cst(start_time)
-		if end_time == str(None):
-			end_time = "None"
-		else:
-			end_time = utc2cst(end_time)
+		# str(None) == "None"
+		# start_time = "None" if start_time == None else utc2cst(start_time)
+		# end_time = "None" if end_time == None else utc2cst(end_time)
 		
 		game_name = str(tds[1].find("b").contents[0])
 		sub_id = str(tds[1].contents[1].get('href').split('/')[2])
