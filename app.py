@@ -13,7 +13,7 @@ CHAT_ID = ""  # Admin ID
 '''Global Variables'''
 URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
-FIRST_DELAY = 10
+FIRST_DELAY = 10 # SECOND_DELAY removed since SteamDB disabled hCaptcha
 BROWSER_TYPE = ["chromium", "firefox", "webkit"]
 NOTIFICATION_FORMAT = "<b>{0}</b>\n\nSub ID: <i>{1}</i>\n链接: <a href=\"{2}\" > {3}</a>\n开始时间: {4}\n结束时间: {5}\n"
 # logger
@@ -67,7 +67,7 @@ def start_process(previous, db_free_page_soup):
 			start_time = str(tds[4].get("data-time"))
 			end_time = str(tds[5].get("data-time"))
 			
-		# str(None) == "None"
+		# str(None) == "None", added this in C# version
 		# start_time = "None" if start_time == None else utc2cst(start_time)
 		# end_time = "None" if end_time == None else utc2cst(end_time)
 		
