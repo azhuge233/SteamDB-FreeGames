@@ -10,16 +10,13 @@ TOKEN = ""  # Bot token
 CHAT_ID = ""  # Admin ID
 '''CONFIG END'''
 
-'''Static Variables'''
+'''Global Variables'''
 URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
 FIRST_DELAY = 10
-'''Static Variables END'''
-
-'''Global Variables'''
+BROWSER_TYPE = ["chromium", "firefox", "webkit"]
 # logger
 logger.name = "SteamDB-FreeGames"
-BROWSER_TYPE = ["chromium", "firefox", "webkit"]
 '''Global Variables END'''
 
 
@@ -96,15 +93,8 @@ def start_process(previous, db_free_page_soup):
 			result.append(d)
 			
 			'''new free games notify'''
-			# check if this game exists in previous records
-			is_push = True
-			for each in previous:
-				if sub_id == each["ID"]:
-					is_push = False
-					break
-			
 			# if it does not exist, then notify
-			if is_push:
+			if not any(d.get('ID') == sub_id for d in previous):
 				
 				'''get game details'''
 				# try to get game's name on Steam store page
