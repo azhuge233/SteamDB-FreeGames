@@ -50,7 +50,8 @@ def start_process(previous, db_free_page_soup):
 	
 	# go through all the free games
 	for each_tr in db_free_page_soup.select(".app"):
-		if ("hidden" in each_tr.attrs.keys()):
+		# skip trap column
+		if "hidden" in each_tr.attrs.keys():
 			continue
 		
 		tds = each_tr.find_all("td")
