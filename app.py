@@ -13,7 +13,7 @@ CHAT_ID = ""  # Admin ID
 '''Static Variables'''
 URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
-FIRST_DELAY = 8
+FIRST_DELAY = 10
 '''Static Variables END'''
 
 '''Global Variables'''
