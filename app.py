@@ -1,5 +1,6 @@
 import datetime
 import sys
+import subprocess as sp
 from MyClass.GETSOUP import *
 from MyClass.json_op import *
 from MyClass.PUSH import *
@@ -13,9 +14,10 @@ CHAT_ID = ""  # Admin ID
 '''Global Variables'''
 URL = "https://steamdb.info/upcoming/free/"
 PATH = "record.json"
-FIRST_DELAY = 10 # SECOND_DELAY removed since SteamDB disabled hCaptcha
+FIRST_DELAY = 10  # SECOND_DELAY removed since SteamDB disabled hCaptcha
 BROWSER_TYPE = ["chromium", "firefox", "webkit"]
 NOTIFICATION_FORMAT = "<b>{0}</b>\n\nSub ID: <i>{1}</i>\n链接: <a href=\"{2}\" > {3}</a>\n开始时间: {4}\n结束时间: {5}\n"
+INSTALL_COMMAND = "playwright {0} {1}"
 # logger
 logger.name = "SteamDB-FreeGames"
 '''Global Variables END'''
@@ -66,10 +68,6 @@ def start_process(previous, db_free_page_soup):
 			start_time = str(tds[4].get("data-time"))
 			end_time = str(tds[5].get("data-time"))
 		
-		# str(None) == "None", added this in C# version
-		# start_time = "None" if start_time == None else utc2cst(start_time)
-		# end_time = "None" if end_time == None else utc2cst(end_time)
-		
 		game_name = str(tds[1].find("b").contents[0])
 		sub_id = str(tds[1].contents[1].get('href').split('/')[2])
 		# remove the url variables
@@ -112,7 +110,7 @@ def start_process(previous, db_free_page_soup):
 		logger.info("No new free games, no messages were sent!")
 	else:
 		logger.info("Sending notifications...")
-		logger.info("This may fail due to network issue.")
+		logger.info("This might fail due to network issue")
 		send_notification(push_result)
 	
 	# refresh the record
@@ -123,8 +121,23 @@ def start_process(previous, db_free_page_soup):
 		logger.info("No records were written!")
 
 
+def install_webkit():
+	output = sp.getoutput(INSTALL_COMMAND.format("install", "webkit"))
+	if (output == "") or ("downloaded to" in output):
+		return True
+	else:
+		return False
+
+
 def main():
 	logger.warning("------------------- Start job -------------------")
+	
+	logger.warning("Installing webkit...")
+	if install_webkit():
+		logger.warning("Done")
+	else:
+		logger.error("Failed to install webkit")
+		sys.exit()
 	
 	logger.warning("Loading previous records...")
 	previous = load_json(path=PATH)
