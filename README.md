@@ -6,22 +6,18 @@ Gathering Steam free games information from [SteamDB](https://steamdb.info/upcom
 
 There's a [dotnet version](https://github.com/azhuge233/SteamDB-FreeGames-dotnet), any future updates will be added there first.
 
-## Requirements
-
-- python3
-  - playwright
-  - bs4(lxml)
-  - pyTelegramBotAPI
-  - ~~selenium~~ (Not using, but required)
-  - ~~undetected_chromedriver~~ (Not using, but required)
-
 ## Usage
 
-Install playwright components 
+Clone repo
+
+```shell
+git clone https://github.com/azhuge233/SteamDB-FreeGames.git
+```
+
+Install packages
 
 ``` shell
-pip3 install playwright
-python3 -m playwright install
+pip3 install -r requirements.txt
 ```
 
 Fill your bot TOKEN and your account ID to CONFIG field in the app.py file, then run
