@@ -15,7 +15,9 @@ There's a [dotnet version](https://github.com/azhuge233/SteamDB-FreeGames-dotnet
     - [https://github.com/azhuge233/EpicBundle-FreeGames](https://github.com/azhuge233/EpicBundle-FreeGames)(Python)
     - [https://github.com/azhuge233/EpicBundle-FreeGames-dotnet](https://github.com/azhuge233/EpicBundle-FreeGames-dotnet)
 - Indiegala
-    - [https://github.com/azhuge233/IndiegalaFreebieNotifier](
+    - [https://github.com/azhuge233/IndiegalaFreebieNotifier](https://github.com/azhuge233/IndiegalaFreebieNotifier)
+- GOG
+    - [https://github.com/azhuge233/GOGGiveawayNotifier](https://github.com/azhuge233/GOGGiveawayNotifier)
 
 ## Usage
 
